@@ -1,7 +1,7 @@
 
 const _HALF_PI  = Math.PI / 2;
 
-module.exports = {
+export default {
 
   Linear: {
     easeNone: function (t) { return t }

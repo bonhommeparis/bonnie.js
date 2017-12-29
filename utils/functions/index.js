@@ -1,6 +1,6 @@
 
 import bind from './bind';
 
-module.exports = {
+export default {
   bind: bind
 };

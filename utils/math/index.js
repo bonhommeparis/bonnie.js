@@ -8,7 +8,7 @@ import toDegree       from './toDegree';
 import toRadian       from './toRadian';
 import valueFromRatio from './valueFromRatio';
 
-module.exports = {
+export default {
   abs: abs,
   calculateRatio: calculateRatio,
   clamp: clamp,

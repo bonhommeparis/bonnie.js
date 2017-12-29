@@ -3,7 +3,7 @@ const format = ( ax, ay, bx, by ) => {
   return 'cubic-bezier(' + ax + ', ' + ay + ', ' + bx + ', ' + by + ')';
 };
 
-module.exports = {
+export default {
 
   Linear: {
     easeNone: format( 0.250, 0.250, 0.750, 0.750 )

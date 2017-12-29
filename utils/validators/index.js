@@ -4,7 +4,7 @@ import isEmpty    from './isEmpty';
 import isset      from './isset';
 import isString   from './isString';
 
-module.exports = {
+export default {
   isEmail: isEmail,
   isEmpty: isEmpty,
   isset: isset,

@@ -5,7 +5,7 @@ import toCapitalize   from './toCapitalize';
 import toSlug         from './toSlug';
 import toUnderscore   from './toUnderscore';
 
-module.exports = {
+export default {
   pad: pad,
   toCamelCase: toCamelCase,
   toCapitalize: toCapitalize,
