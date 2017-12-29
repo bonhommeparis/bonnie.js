@@ -1,0 +1,21 @@
+{
+  "name": "bonnie.js",
+  "version": "0.1.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bonhommeparis/bonnie.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bonhommeparis/bonnie.js/issues"
+  },
+  "homepage": "https://github.com/bonhommeparis/bonnie.js#readme",
+  "scripts": {
+  },
+  "browserify": {
+    "transform": [
+      ["babelify"]
+    ]
+  }
+}
+
