@@ -4,7 +4,9 @@
  * @param {Function[]} fnKeys
  * @param {any} ctx
  */
-export default (fnKeys, ctx) => {
+const bind = (fnKeys, ctx) => {
   fnKeys = Array.isArray(fnKeys) ? fnKeys : [fnKeys];
   fnKeys.forEach((key) => ctx[key] = ctx[key].bind(ctx));
 };
+
+export default bind;

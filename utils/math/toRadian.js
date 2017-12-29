@@ -5,6 +5,8 @@
  * @param {Number} degree
  * @returns {Number}
  */
-export default (degree) => {
+const toRadian = (degree) => {
   return degree / 180 * Math.PI;
 };
+
+export default toRadian;

@@ -5,7 +5,7 @@
  * @param {Array} array
  * @returns {Array}
  */
-export default (array) => {
+const shuffle = (array) => {
   
   var currentIndex = array.length, temporaryValue, randomIndex;
   // While there remain elements to shuffle...
@@ -21,3 +21,5 @@ export default (array) => {
 
   return array;
 }
+
+export default shuffle;

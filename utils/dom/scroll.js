@@ -1,4 +1,10 @@
-export default (pVertical=true) => {
+
+/**
+ * Return the scrollTop value from current browser
+ * @param {Boolean} pVertical
+ * @returns {Boolean}
+ */
+const scroll = (pVertical=true) => {
     
   if(pVertical) {
     if (window.pageYOffset) return window.pageYOffset;
@@ -8,3 +14,5 @@ export default (pVertical=true) => {
     return document.documentElement.clientWidth ? document.documentElement.scrollLeft : document.body.scrollLeft;
   }
 }
+
+export default scroll;

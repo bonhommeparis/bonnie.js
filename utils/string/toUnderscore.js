@@ -6,6 +6,8 @@ import toSlug from './toSlug';
  * @param {String} str
  * @returns {String} 
  */
-export default (str) => {
+const toUnderscore = (str) => {
   return toSlug(str).replace(/-+/, '_');
 };
+
+export default toUnderscore;

@@ -4,7 +4,7 @@
  * @param {String} str
  * @returns {Boolean}
  */
-export default (str) => {
+const isEmpty = (str) => {
   var valid = false;
 
   if (typeof value === "undefined") valid = true;
@@ -14,3 +14,5 @@ export default (str) => {
 
   return valid;
 };
+
+export default isEmpty;

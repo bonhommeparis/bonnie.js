@@ -4,6 +4,8 @@
  * 
  * @param {Number} value 
  */
-export default (value) => {
+const round = (value) => {
   return value < 0 ? parseInt(value - .5) : parseInt(value + .5);
 };
+
+export default round;

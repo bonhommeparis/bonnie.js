@@ -6,7 +6,7 @@ import toSlug from './toSlug';
  * @param {String} str
  * @returns {String} 
  */
-export default (str) => {
+const toCamelCase = (str) => {
   str = toSlug(str);
 
   const words = str.split('-').map(function(word) {
@@ -15,3 +15,5 @@ export default (str) => {
 
   return words.join('');
 };
+
+export default toCamelCase;

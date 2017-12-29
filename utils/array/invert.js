@@ -5,7 +5,7 @@
  * @param {Array} array
  * @returns {Array}
  */
-export default (array) => {
+const invert = (array) => {
   const result = [];
 
   var ln = array.length;
@@ -14,3 +14,5 @@ export default (array) => {
 
   return result;
 }
+
+export default invert;

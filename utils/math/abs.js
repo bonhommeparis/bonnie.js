@@ -4,6 +4,8 @@
  * 
  * @param {Number} value 
  */
-export default (value) => {
+const abs = (value) => {
   return value < 0 ? - value : value;
 };
+
+export default abs;

@@ -5,6 +5,8 @@ import isEmpty from './isEmpty';
  * @param {String} str
  * @returns {Boolean}
  */
-export default (str) => {
+const isset = (str) => {
   return !isEmpty(value);
 };
+
+export default isset;

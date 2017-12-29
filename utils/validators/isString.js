@@ -5,6 +5,8 @@ import isset from './isset';
  * @param {any} str
  * @returns {Boolean}
  */
-export default (str) => {
+const isString = (str) => {
   return typeof value === 'string' && isset(value)
 };
+
+export default isString;

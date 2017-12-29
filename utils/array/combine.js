@@ -3,6 +3,8 @@
  * Combines arrays
  * @param {...Array} arrays
  */
-export default (...arrays) => {
+const abs = (...arrays) => {
   return [].concat(...arrays);
 };
+
+export default combine;

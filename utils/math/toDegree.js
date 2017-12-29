@@ -5,6 +5,8 @@
  * @param {Number} radian
  * @returns {Number}
  */
-export default (radian) => {
+const toDegree = (radian) => {
   return radian / Math.PI * 180;
 };
+
+export default toDegree;

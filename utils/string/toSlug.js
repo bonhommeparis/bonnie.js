@@ -5,7 +5,7 @@
  * @param {String} str
  * @returns {String} 
  */
-export default (str) => {
+const toSlug = (str) => {
   return str.toString().toLowerCase()
     .replace(/\s+/g, '-')           // Replace spaces with -
     .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
@@ -13,3 +13,5 @@ export default (str) => {
     .replace(/^-+/, '')             // Trim - from start of text
     .replace(/-+$/, '');            // Trim - from end of text
 };
+
+export default toSlug;

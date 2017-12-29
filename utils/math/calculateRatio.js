@@ -8,7 +8,9 @@ import clamp from './clamp';
  * @param {Number} max
  * @param {Boolean} [bClamp=true]
  */
-export default ( value, min, max, bClamp=true ) => {
+const calculateRatio = ( value, min, max, bClamp=true ) => {
   const r = ( value - min ) / ( max - min );
   return bClamp ? clamp( r, 0, 1 ) : r;
 };
+
+export default calculateRatio;

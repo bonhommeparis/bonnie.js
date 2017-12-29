@@ -10,7 +10,7 @@ import toSlug from './toSlug';
  * @param {Boolean} [insertAfter]
  * @returns {String}
  */
-export default (str, limit, char, insertAfter) => {
+const pad = (str, limit, char, insertAfter) => {
   var s = str.toString();
 
   if (s.length < limit) {
@@ -22,3 +22,5 @@ export default (str, limit, char, insertAfter) => {
 
   return s;
 };
+
+export default pad;

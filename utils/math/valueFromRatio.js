@@ -6,6 +6,8 @@
  * @param {Number} min
  * @param {Number} max
  */
-export default (ratio, min, max) => {
+const valueFromRatio = (ratio, min, max) => {
   return (max - min) * ratio + min;
 };
+
+export default valueFromRatio;
