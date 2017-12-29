@@ -10,5 +10,5 @@ import clamp from './clamp';
  */
 export default ( value, min, max, bClamp=true ) => {
   const r = ( value - min ) / ( max - min );
-  return bClamp ? clamp( 0, r, 1 ) : r;
+  return bClamp ? clamp( r, 0, 1 ) : r;
 };
