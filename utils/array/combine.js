@@ -3,7 +3,7 @@
  * Combines arrays
  * @param {...Array} arrays
  */
-const abs = (...arrays) => {
+const combine = (...arrays) => {
   return [].concat(...arrays);
 };
 
