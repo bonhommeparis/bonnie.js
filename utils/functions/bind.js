@@ -1,7 +1,7 @@
 
 /**
  * Bind a list of functions to a specified context
- * @param {Function[]} fnKeys
+ * @param {String[]} fnKeys
  * @param {any} ctx
  */
 const bind = (fnKeys, ctx) => {
