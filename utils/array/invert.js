@@ -10,9 +10,9 @@ const invert = (array) => {
 
   var ln = array.length;
 
-  while(--ln > -1) result.push(array[ln])
+  while (--ln > -1) result.push(array[ln]);
 
   return result;
-}
+};
 
 export default invert;

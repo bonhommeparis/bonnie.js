@@ -1,25 +1,25 @@
 
-const requestAnimFrame = (function(){
+const requestAnimFrame = (function() {
   return  window.requestAnimationFrame       ||
           window.webkitRequestAnimationFrame ||
           window.mozRequestAnimationFrame    ||
-          function( callback ){
+          function(callback) {
             window.setTimeout(callback, 1000 / 60);
           };
 })();
 
-const cancelRequestAnimFrame = ( function() {
+const cancelRequestAnimFrame = (function() {
   return window.cancelAnimationFrame          ||
     window.webkitCancelRequestAnimationFrame  ||
     window.mozCancelRequestAnimationFrame     ||
     window.oCancelRequestAnimationFrame       ||
-    window.msCancelRequestAnimationFrame
-} )();
+    window.msCancelRequestAnimationFrame;
+})();
 
 
 class Raf {
 
-  //________________________________________________________ constructor
+  // ________________________________________________________ constructor
   // -
 
   /**
@@ -44,7 +44,7 @@ class Raf {
     this._onUpdate = this._onUpdate.bind(this);
   }
 
-  //________________________________________________________ public
+  // ________________________________________________________ public
   // -
 
   /**
@@ -58,7 +58,7 @@ class Raf {
    * @param {Number} value
    */
   set framerate(value) {
-    if( this._vars.framerate === value ) return;
+    if (this._vars.framerate === value) return;
     this._vars.framerate = value;
     this._vars.interval = 1000 / value;
   }
@@ -68,13 +68,13 @@ class Raf {
    * Start the request animation frame
    */
   start() {
-    if( this._vars.isRunning ) return;
+    if (this._vars.isRunning) return;
 
     this._vars.isRunning = true;
 
     this._vars.then = performance.now();
 
-    this._raf = requestAnimFrame( this._onUpdate );
+    this._raf = requestAnimFrame(this._onUpdate);
   }
 
 
@@ -82,11 +82,11 @@ class Raf {
    * Stop the request animation frame
    */
   stop() {
-    if( !this._vars.isRunning ) return;
+    if (!this._vars.isRunning) return;
 
     this._vars.isRunning = false;
 
-    cancelRequestAnimFrame( this._raf );
+    cancelRequestAnimFrame(this._raf);
 
     delete this._vars.now;
     delete this._vars.then;
@@ -105,7 +105,7 @@ class Raf {
    * @param {Function} fn - callback function
    */
   subscribe(id, fn) {
-    this._subscribers.push( [ id, fn ] );
+    this._subscribers.push([id, fn]);
     this._vars.length = this._subscribers.length;
   }
 
@@ -115,15 +115,15 @@ class Raf {
    */
   unsubscribe(id) {
 
-    for ( var i = 0; i < this._subscribers.length; ++i ) {
-      if ( this._subscribers[i][0] === id ) {
-        this._subscribers.splice( i, 1 );
+    for (var i = 0; i < this._subscribers.length; ++i) {
+      if (this._subscribers[i][0] === id) {
+        this._subscribers.splice(i, 1);
       }
     }
     this._vars.length = this._subscribers.length;
   }
 
-  //________________________________________________________ events
+  // ________________________________________________________ events
   // -
 
   /** @private */
@@ -132,23 +132,23 @@ class Raf {
     this._vars.now = performance.now();
     this._vars.delta = this._vars.now - this._vars.then;
 
-    if( this._vars.delta > this._vars.interval ) {
+    if (this._vars.delta > this._vars.interval) {
 
       this._callSubscribers();
       this._vars.then = this._vars.now - (this._vars.delta % this._vars.interval);
     }
 
-    if( this._vars.isRunning ) this._raf = requestAnimFrame( this._onUpdate );
+    if (this._vars.isRunning) this._raf = requestAnimFrame(this._onUpdate);
   }
 
-  //________________________________________________________ private
+  // ________________________________________________________ private
   // -
 
   /** @private */
   _callSubscribers() {
     var ln = this._vars.length;
     var subscriber;
-    while( --ln > -1 ) {
+    while (--ln > -1) {
       subscriber = this._subscribers[ln];
       subscriber[1]();
     }

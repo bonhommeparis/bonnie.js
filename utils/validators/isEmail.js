@@ -1,3 +1,5 @@
+import isString from './isString';
+import isEmpty from './isEmpty';
 
 /**
  * Check if value is a valid email
@@ -5,9 +7,9 @@
  * @returns {Boolean}
  */
 const isEmail = (str) => {
-  if (!isString(email)) return false;
-  if (empty(email)) return false;
-  if (email.match(/^([A-Z|a-z|0-9](\.|_){0,1})+[A-Z|a-z|0-9]\@([A-Z|a-z|0-9])+((\.){0,1}[A-Z|a-z|0-9]){2}\.[a-z]{2,3}$/g) === null) return false;
+  if (!isString(str)) return false;
+  if (isEmpty(str)) return false;
+  if (str.match(/^([A-Z|a-z|0-9](\.|_){0,1})+[A-Z|a-z|0-9]@([A-Z|a-z|0-9])+((\.){0,1}[A-Z|a-z|0-9]){2}\.[a-z]{2,3}$/g) === null) return false;
   return true;
 };
 

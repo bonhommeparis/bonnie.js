@@ -8,4 +8,4 @@ export default {
   inverse: inverse,
   shuffle: shuffle,
   without: without
-}
+};

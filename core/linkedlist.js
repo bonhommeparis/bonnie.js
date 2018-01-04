@@ -1,13 +1,13 @@
 
 class LinkedList {
 
-  //________________________________________________________ constructor
+  // _______________________________________________________ constructor
   // -
 
   /**
    * Linked List
    * @constructor
-   * @param {*} values - List datas 
+   * @param {*} values - List datas
    */
   constructor(...values) {
 
@@ -21,12 +21,10 @@ class LinkedList {
     var i = 0;
 
     // Equivalent to Array(len)
-    if (len === 1)
-    {
+    if (len === 1) {
       len = values[0];
       head = this._tail = newNode = new LinkedListNode();
-      for (i = 1; i < len; ++i)
-      {
+      for (i = 1; i < len; ++i) {
         newNode = new LinkedListNode();
         newNode.next = head;
         head.prev = newNode;
@@ -34,12 +32,10 @@ class LinkedList {
       }
     }
     // Equivalent to Array(value0, value1, ..., valueN)
-    else if (len > 1)
-    {
-      i = len-1;
+    else if (len > 1) {
+      i = len - 1;
       head = this._tail = newNode = new LinkedListNode(values[i--]);
-      for (; i >= 0; --i)
-      {
+      for (; i >= 0; --i) {
         newNode = new LinkedListNode(values[i]);
         newNode.next = head;
         head.prev = newNode;
@@ -50,19 +46,19 @@ class LinkedList {
     this._head = head;
   }
 
-  //________________________________________________________ public
+  // _______________________________________________________ public
   // -
 
   /**
    * Get the list head
    */
   get head() { return this._head; }
-  
+
   /**
    * Get the list tail
    */
   get tail() { return this._tail; }
-  
+
   /**
    * Get the list length
    */
@@ -76,20 +72,20 @@ class LinkedList {
   push(...args) {
 
     var numArgs = args.length,
-        i = -1,
-        arg, 
-        newNode;
+      i = -1,
+      arg,
+      newNode;
 
-    
-    while( ++i < numArgs) {
-      
+    while (++i < numArgs) {
+
       arg = args[i];
       newNode = new LinkedListNode(arg);
       newNode.prev = this._tail;
 
-      if(this._tail) {
+      if (this._tail) {
         this._tail.next = newNode;
-      } else {
+      }
+      else {
         this._head = newNode;
       }
       this._tail = newNode;
@@ -103,7 +99,7 @@ class LinkedList {
    * Remove the first element of the list and return it
    */
   shift() {
-    if( this._head ) {
+    if (this._head) {
       const ret   = this._head.data;
       this._head  = this._head.next;
       --this._length;
@@ -137,19 +133,19 @@ class LinkedList {
    * @param {*} values - Elements to insert at the start of the LinkedList.
    */
   unshift(...args) {
-    
-    var numArgs = args.length,
-        i = -1,
-        arg, 
-        newNode;
 
-    while( ++i < numArgs ) {
+    var numArgs = args.length,
+      i = -1,
+      arg,
+      newNode;
+
+    while (++i < numArgs) {
 
       arg = args[i];
       newNode = new LinkedListNode(arg);
       newNode.next = this._head;
 
-      if( this._head ) {
+      if (this._head) {
         this._head.prev = newNode;
       }
       else {
@@ -167,7 +163,7 @@ class LinkedList {
 
 class LinkedListNode {
 
-  constructor(data=null) {
+  constructor(data = null) {
     this.next = null;
     this.prev = null;
     this.data = data;

@@ -1,4 +1,3 @@
-import toSlug from './toSlug';
 
 /**
  * Append or preprend a character to a string

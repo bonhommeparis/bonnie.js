@@ -10,5 +10,5 @@ export default {
   toCamelCase: toCamelCase,
   toCapitalize: toCapitalize,
   toSlug: toSlug,
-  toUnderscore: toUnderscore,
+  toUnderscore: toUnderscore
 };

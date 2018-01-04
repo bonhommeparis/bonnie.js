@@ -2,10 +2,10 @@ import isEmpty from './isEmpty';
 
 /**
  * Check if value is not an empty string
- * @param {String} str
+ * @param {String} value
  * @returns {Boolean}
  */
-const isset = (str) => {
+const isset = (value) => {
   return !isEmpty(value);
 };
 

@@ -6,7 +6,7 @@ import isset from './isset';
  * @returns {Boolean}
  */
 const isString = (str) => {
-  return typeof value === 'string' && isset(value)
+  return typeof str === 'string' && isset(str);
 };
 
 export default isString;

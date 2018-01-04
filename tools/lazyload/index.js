@@ -3,9 +3,9 @@
  */
 export default class LazyLoad {
 
-  //________________________________________________________ constructor
+  // ________________________________________________________ constructor
   // -
-  
+
   /**
    * @constructor
    * @param {Object} options
@@ -13,23 +13,23 @@ export default class LazyLoad {
    * @param {String} options.rootMargin -
    * @param {Number} options.thresold - Threshold(s) at which to trigger callback
    */
-  constructor(options={}) {
+  constructor(options = {}) {
 
     const ioOptions = {
       root: options.root || null,
       rootMargin: options.rootMargin || '5%',
       thresold: options.thresold || 0
     };
-    
+
     this._onObserverCallback = this._onObserverCallback.bind(this);
-    
+
     this._itemsToLoad = [];
     this._observer    = new IntersectionObserver(this._onObserverCallback, ioOptions);
 
     this._parse();
   }
 
-  //________________________________________________________ public
+  // ________________________________________________________ public
   // -
 
   /**
@@ -47,24 +47,24 @@ export default class LazyLoad {
   destroy() {
     this._cleanItems(true);
     this._observer && this._observer.disconnect();
-    
+
     this._observer    = null;
     this._itemsToLoad = null;
   }
 
-  //________________________________________________________ events
+  // ________________________________________________________ events
   // -
 
   /**
    * @private
-   * @param {Array} entries 
-   * @param {IntersectionObserver} observer 
+   * @param {Array} entries
+   * @param {IntersectionObserver} observer
    */
-  _onObserverCallback(entries, observer) {
+  _onObserverCallback(entries) {
     var ln = entries.length,
         entry;
 
-    while(--ln > -1) {
+    while (--ln > -1) {
       entry = entries[ln];
 
       if (entry.intersectionRatio > 0 || entry.isIntersecting) {
@@ -74,22 +74,22 @@ export default class LazyLoad {
     }
   }
 
-  //________________________________________________________ private
+  // ________________________________________________________ private
   // -
 
   /** @private */
   _parse() {
     const els = [...document.querySelectorAll('.js-lazy-load:not(.is-loaded)')];
     var i = els.length;
-    while( --i > -1 ) this._observer.observe(els[i]);
+    while (--i > -1) this._observer.observe(els[i]);
   }
 
   /**
    * @private
-   * @param {HTMLElement} el 
+   * @param {HTMLElement} el
    */
   _loadElement(el) {
-    
+
     const item = {
       el: el,
       lazyEl: el,
@@ -105,7 +105,7 @@ export default class LazyLoad {
 
     // Depending on type, update item
     switch (nodeName) {
-      
+
       case 'picture':
         el.lazyEl = el.querySelector('img');
         break;
@@ -125,7 +125,7 @@ export default class LazyLoad {
       // update el classes to loaded status
       this._updateClasses(el);
 
-      if( item.isBackgroundImage === true ) {
+      if (item.isBackgroundImage === true) {
         item.el.style.backgroundImage = `url("${item.lazyEl.src}")`;
       }
 
@@ -134,10 +134,10 @@ export default class LazyLoad {
     };
 
     item.onError = () => {
-      
+
       // set item enable to clean
       item.isEnableToClean = true;
-      
+
       // update el classes to error status
       this._updateClasses(el, false);
 
@@ -147,7 +147,7 @@ export default class LazyLoad {
 
     const src = item.lazyEl.dataset.src;
 
-    if( src ) {
+    if (src) {
 
       // If `el` is not a <img>, a <picture>, a <video>, a <audio> and an <iframe>,
       // we assume that we will set the `data-src` as `background-image`.
@@ -179,7 +179,7 @@ export default class LazyLoad {
 
     }
     // If `el` is a <video> or a <audio> with <source> element
-    else if( item.isMedia) {
+    else if (item.isMedia) {
 
       // add to array for better clean
       this._itemsToLoad.push(item);
@@ -203,7 +203,7 @@ export default class LazyLoad {
   }
 
   /** @private */
-  _updateClasses(el, isLoaded=true) {
+  _updateClasses(el, isLoaded = true) {
     el.classList.remove('is-loading');
     el.classList.add(isLoaded ? 'is-loaded' : 'is-error');
   }
@@ -213,7 +213,7 @@ export default class LazyLoad {
     item.lazyEl.addEventListener(item.isMedia ? 'canplay' : 'load', item.onLoadComplete, { capture: false, passive: true });
     item.lazyEl.addEventListener('error', item.onError, { capture: false, passive: true });
   }
-  
+
   /** @private */
   _removeEvents(item) {
     item.lazyEl.removeEventListener(item.isMedia ? 'canplay' : 'load', item.onLoadComplete);
@@ -221,17 +221,17 @@ export default class LazyLoad {
   }
 
   /** @private */
-  _cleanItems(pForceClean=false) {
+  _cleanItems(pForceClean = false) {
 
-    if(this._itemsToLoad === null) return;
+    if (this._itemsToLoad === null) return;
 
     var ln = this._itemsToLoad.length,
         item;
-    
-    while(--ln > -1) {
+
+    while (--ln > -1) {
       item = this._itemsToLoad[ln];
-     
-      if(pForceClean || item.isEnableToClean) {
+
+      if (pForceClean || item.isEnableToClean) {
         this._itemsToLoad.splice(ln, 1);
         this._removeEvents(item);
         item = null;

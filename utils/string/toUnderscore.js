@@ -2,9 +2,8 @@ import toSlug from './toSlug';
 
 /**
  * Convert dashes to underscores
- * 
  * @param {String} str
- * @returns {String} 
+ * @returns {String}
  */
 const toUnderscore = (str) => {
   return toSlug(str).replace(/-+/, '_');

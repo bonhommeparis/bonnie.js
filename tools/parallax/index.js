@@ -1,13 +1,11 @@
-
-import LinkedList     from '../../core/linkedlist';
-import calculateRatio from '../../utils/math/calculateRatio';
+import LinkedList from '../../core/linkedlist';
 
 class Parallax {
 
-  //________________________________________________________ constructor
+  // ________________________________________________________ constructor
   // -
   constructor(el) {
-    
+
     this._el = el;
 
     this._defaultRule = {
@@ -34,16 +32,20 @@ class Parallax {
       isResizing: false
     };
 
-    this._size  = { x: 0, y: 0 };
+    this._size = {
+      x: 0,
+      y: 0
+    };
+
     this._rules = new LinkedList();
   }
 
-  //________________________________________________________ public
+  // ________________________________________________________ public
   // -
 
   set current(value) {
     this._vars.scrollY = value;
-    if( this._vars.isResizing ) return;
+    if (this._vars.isResizing) return;
 
     this._update();
   }
@@ -63,19 +65,19 @@ class Parallax {
 
   /**
    *  Add a new rule
-   * 
-   * @param {string} [query=data-prllx-item] - 
-   * @param {Object} [functions] - 
-   * @param {function} [functions.createCacheItem] - 
-   * @param {function} [functions.resetCacheItem] - 
-   * @param {function} [functions.updateItem] - 
-   * @param {function} [functions.calculateViewPort] - 
+   *
+   * @param {string} [query=data-prllx-item] -
+   * @param {Object} [functions] -
+   * @param {function} [functions.createCacheItem] -
+   * @param {function} [functions.resetCacheItem] -
+   * @param {function} [functions.updateItem] -
+   * @param {function} [functions.calculateViewPort] -
    */
-  addRule( query='[data-prllx-item]', functions={} ) {
+  addRule(query = '[data-prllx-item]', functions = {}) {
 
     const rule = {
       query: query,
-      fns: assignIn({}, this._defaultFunctions, functions)
+      fns: Object.assign({}, this._defaultFunctions, functions)
     };
 
     rule.domItems = null;
@@ -87,12 +89,12 @@ class Parallax {
 
   /**
    * Set viewport size
-   * @param {Float} pWidth 
-   * @param {Float} pHeight 
-   * @param {Float} pContainerHeight 
+   * @param {Float} pWidth
+   * @param {Float} pHeight
+   * @param {Float} pContainerHeight
    */
   setSize(pWidth, pHeight) {
-    if(this._size.x === pWidth && this._size.y === pHeight) return;
+    if (this._size.x === pWidth && this._size.y === pHeight) return;
     this._size.x = pWidth;
     this._size.y = pHeight;
 
@@ -100,11 +102,11 @@ class Parallax {
   }
 
   /**
-   * 
+   *
    */
   reset() {
     this._vars.isResizing = true;
-  
+
     this._resetCached();
     this._resetRules();
     this._grabItems();
@@ -115,33 +117,33 @@ class Parallax {
     this._update();
 
   }
-  
+
   /**
    * Destroy the parallax and his items references
    */
   destroy() {
 
     var rule;
-    if( this._rules ) {
-      
-      while( this._rules.length ) {
+    if (this._rules) {
+
+      while (this._rules.length) {
 
         rule = this._rules.shift();
 
-        while( rule.cachedItems.length.length ) rule.cachedItems.shift();
+        while (rule.cachedItems.length.length) rule.cachedItems.shift();
 
         rule.cachedItems = null;
-        rule.domItems    = null;
+        rule.domItems = null;
       }
     }
-    
-    this._el    = null;
-    this._vars  = null;
-    this._size  = null;
+
+    this._el = null;
+    this._vars = null;
+    this._size = null;
     this._rules = null;
   }
 
-  //________________________________________________________ private
+  // ________________________________________________________ private
   // -
 
   /* -------- Get Dom -------- */
@@ -150,12 +152,12 @@ class Parallax {
   _grabItems() {
 
     var node = this._rules.head,
-        rule;
+      rule;
 
-    while( node ) {
+    while (node) {
 
       rule = node.data;
-      rule.domItems = Array.prototype.slice.call( this._el.querySelectorAll( rule.query ) );
+      rule.domItems = Array.prototype.slice.call(this._el.querySelectorAll(rule.query));
       node = node.next;
     }
   }
@@ -166,16 +168,16 @@ class Parallax {
   _getCache() {
 
     var node = this._rules.head,
-        rule,
-        ln;
+      rule,
+      ln;
 
-    while( node ) {
+    while (node) {
 
       rule = node.data;
-      ln   = rule.domItems.length;
+      ln = rule.domItems.length;
 
-      while( --ln > -1 ) {
-        rule.cachedItems.push( rule.fns.createCacheItem( rule.domItems[ln] ) );
+      while (--ln > -1) {
+        rule.cachedItems.push(rule.fns.createCacheItem(rule.domItems[ln]));
       }
 
       node = node.next;
@@ -193,9 +195,9 @@ class Parallax {
       bottom: bounding.bottom + this._vars.scrollY,
       width: bounding.width,
       height: bounding.height,
-      speed: parseFloat( domEl.getAttribute('data-speed') ) || 1,
-      deltaStart: parseFloat( domEl.getAttribute('data-delta-start') )|| 0,
-      deltaEnd: parseFloat( domEl.getAttribute('data-delta-end') ) || 0,
+      speed: parseFloat(domEl.getAttribute('data-speed')) || 1,
+      deltaStart: parseFloat(domEl.getAttribute('data-delta-start')) || 0,
+      deltaEnd: parseFloat(domEl.getAttribute('data-delta-end')) || 0,
       invert: domEl.hasAttribute('data-invert') || false,
       state: true
     };
@@ -207,37 +209,36 @@ class Parallax {
   _resetCached() {
 
     var node = this._rules.head,
-        rule,
-        ln,
-        cacheItem;
+      rule,
+      cacheItem;
 
-    while( node ) {
+    while (node) {
 
       rule = node.data;
-      if( rule.cachedItems ) {
-        while( rule.cachedItems.length ) {
+      if (rule.cachedItems) {
+        while (rule.cachedItems.length) {
           cacheItem = rule.cachedItems.shift();
-          rule.fns.resetCacheItem( cacheItem );
+          rule.fns.resetCacheItem(cacheItem);
           cacheItem = null;
         }
       }
-      
+
       node = node.next;
     }
   }
 
   /** @private */
-  _resetCacheItem( item ) {
+  _resetCacheItem(item) {
     item.el.style.removeProperty('transform');
-    item.el.classList.remove('u-hidden'); 
+    item.el.classList.remove('u-hidden');
   }
 
   /** @private */
   _resetRules() {
     var node = this._rules.head,
-        rule;
+      rule;
 
-    while( node ) {
+    while (node) {
       rule = node.data;
       rule.domItems = null;
       rule.cachedItems = new LinkedList();
@@ -251,20 +252,19 @@ class Parallax {
   _update() {
 
     var node = this._rules.head,
-        rule,
-        cacheNode,
-        cacheItem;
+      rule,
+      cacheNode;
 
-    while( node ) { 
+    while (node) {
 
-      rule      = node.data;
+      rule = node.data;
       cacheNode = rule.cachedItems.head;
 
-      while( cacheNode ) {
+      while (cacheNode) {
 
-        rule.fns.updateItem( cacheNode.data, rule.fns.calculateViewPort(cacheNode.data) );
+        rule.fns.updateItem(cacheNode.data, rule.fns.calculateViewPort(cacheNode.data));
 
-        
+
         cacheNode = cacheNode.next;
       }
 
@@ -274,16 +274,17 @@ class Parallax {
   }
 
   /** @private */
-  _updateItem( item, result ) {
+  _updateItem(item, result) {
 
-    if( result.isVisible ) {
+    if (result.isVisible) {
       item.el.style.transform = `translate3d(0, ${result.value}px, 0)`;
-      if( !item.state ) {
+      if (!item.state) {
         // item.el.classList.remove('u-hidden');
         item.state = true;
       }
 
-    } else {
+    }
+    else {
       // item.el.classList.add('u-hidden');
       item.state = false;
     }
@@ -294,10 +295,10 @@ class Parallax {
   /* -------- CalculateViewPorts -------- */
 
   /** @private */
-  _calculateViewPort( cache ) {
+  _calculateViewPort(cache) {
 
     const speed = cache.speed;
-    
+
     const deltaStart = cache.height * cache.deltaStart / 100;
     const deltaEnd = cache.height * cache.deltaEnd / 100;
     const delta = deltaEnd - deltaStart;
@@ -313,13 +314,17 @@ class Parallax {
 
     const min = this._size.y;
 
-    const max = - hh;
-    const ratio = ( itemScrollY - min) / (max - min) * speed;
+    const max = -hh;
+    const ratio = (itemScrollY - min) / (max - min) * speed;
 
-    const value = (deltaStart + delta * ratio) + (- fullHeight + fullHeight / speed) * ratio;
+    const value = (deltaStart + delta * ratio) + (-fullHeight + fullHeight / speed) * ratio;
     const isVisible = ratio > 0 && ratio < 1;
 
-    return {isVisible: isVisible, value: value.toFixed(2), ratio: ratio };
+    return {
+      isVisible: isVisible,
+      value: value.toFixed(2),
+      ratio: ratio
+    };
   }
 
   /* -------- Resize -------- */

@@ -2,9 +2,8 @@ import toSlug from './toSlug';
 
 /**
  * Convert string in camelCase
- * 
  * @param {String} str
- * @returns {String} 
+ * @returns {String}
  */
 const toCamelCase = (str) => {
   str = toSlug(str);

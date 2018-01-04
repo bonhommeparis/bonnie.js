@@ -1,7 +1,6 @@
 
 /**
  * Calculate a value from a specified ratio with a minimum and a maximum
- * 
  * @param {Number} ratio
  * @param {Number} min
  * @param {Number} max
