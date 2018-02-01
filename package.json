@@ -1,6 +1,6 @@
 {
   "name": "bonnie.js",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -34,6 +34,6 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^4.14.0"
+    "eslint": "^4.16.0"
   }
 }
