@@ -8,8 +8,8 @@ import toSlug from './toSlug';
 const toCamelCase = (str) => {
   str = toSlug(str);
 
-  const words = str.split('-').map(function(word) {
-    return word.slice(0, 1).toUpperCase() + word.slice(1);
+  const words = str.split('-').map(function(word, index) {
+    return index === 0 ? word : word.slice(0, 1).toUpperCase() + word.slice(1);
   });
 
   return words.join('');
