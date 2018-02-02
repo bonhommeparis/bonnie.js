@@ -31,17 +31,17 @@ class Vacuum {
 
     const ua = navigator.userAgent.toLowerCase();
 
+    // Windows
+    const isWindows       = /windows/.test(ua);
+    const isWindowsPhone  = /windows phone|iemobile|wpdesktop/.test(ua);
+    const isWindowsTablet = isWindows && /touch/.test(ua) && !isWindowsPhone;
+    
     // Apple
     const isOsx      = /mac os x/.test(ua);
     const isIos      = !isWindowsPhone && (/ip(hone|od|ad)/i).test(ua) && !window.MSStream;
     const isIpad     = !isWindowsPhone && (/ipad/i).test(ua) && isIos;
     const isIphone   = isIos && (/iphone/.test(ua) || /ipod/.test(ua));
     const iosVersion = this._getIosVersion();
-
-    // Windows
-    const isWindows       = /windows/.test(ua);
-    const isWindowsPhone  = /windows phone|iemobile|wpdesktop/.test(ua);
-    const isWindowsTablet = isWindows && /touch/.test(ua) && !isWindowsPhone;
 
     // Android
     const isAndroid       = /android/.test(ua);
