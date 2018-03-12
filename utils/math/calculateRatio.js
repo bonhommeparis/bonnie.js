@@ -6,6 +6,7 @@ import clamp from './clamp';
  * @param {Number} min
  * @param {Number} max
  * @param {Boolean} [bClamp=true]
+ * @return {number}
  */
 const calculateRatio = (value, min, max, bClamp = true) => {
   const r = (value - min) / (max - min);

@@ -4,6 +4,7 @@
  * @param {Number} ratio
  * @param {Number} min
  * @param {Number} max
+ * @return {number}
  */
 const valueFromRatio = (ratio, min, max) => {
   return (max - min) * ratio + min;
