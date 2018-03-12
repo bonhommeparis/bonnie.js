@@ -1,24 +1,28 @@
 # exclude
-tools
+tools/anchors/**
+tools/customScroll/**
+tools/parallax/AdvancedParallax.js
+demo/**/**
 
-#tests
+# docs
 doc
 docs
 
-#tests
+# tests
 test
 coverage
 
-#build tools
+# build tools
 .travis.yml
 .jenkins.yml
 .codeclimate.yml
 
-#linters
+# linters
 .jscsrc
 .jshintrc
 .eslintrc*
+.estlintignore
 
-#editor settings
+# editor settings
 .idea
 .editorconfig
