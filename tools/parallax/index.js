@@ -8,18 +8,6 @@ class Parallax {
 
     this._el = el;
 
-    this._defaultRule = {
-      query: '[data-prllx-item]',
-      domItems: null,
-      cachedItems: null,
-      fns: {
-        createCacheItem: this._createCacheItem.bind(this),
-        resetCacheItem: this._resetCacheItem.bind(this),
-        updateItem: this._updateItem.bind(this),
-        calculateViewPort: this._calculateViewPort.bind(this)
-      }
-    };
-
     this._defaultFunctions = {
       createCacheItem: this._createCacheItem.bind(this),
       resetCacheItem: this._resetCacheItem.bind(this),
@@ -94,7 +82,6 @@ class Parallax {
    * @param {Float} pContainerHeight
    */
   setSize(pWidth, pHeight) {
-    if (this._size.x === pWidth && this._size.y === pHeight) return;
     this._size.x = pWidth;
     this._size.y = pHeight;
 
@@ -115,7 +102,6 @@ class Parallax {
     this._vars.isResizing = false;
 
     this._update();
-
   }
 
   /**
@@ -198,7 +184,7 @@ class Parallax {
       speed: parseFloat(domEl.getAttribute('data-speed')) || 1,
       deltaStart: parseFloat(domEl.getAttribute('data-delta-start')) || 0,
       deltaEnd: parseFloat(domEl.getAttribute('data-delta-end')) || 0,
-      invert: domEl.hasAttribute('data-invert') || false,
+      // invert: domEl.hasAttribute('data-invert') || false,
       state: true
     };
 
@@ -279,16 +265,14 @@ class Parallax {
     if (result.isVisible) {
       item.el.style.transform = `translate3d(0, ${result.value}px, 0)`;
       if (!item.state) {
-        // item.el.classList.remove('u-hidden');
+        item.el.classList.remove('u-hidden');
         item.state = true;
       }
-
     }
     else {
-      // item.el.classList.add('u-hidden');
+      item.el.classList.add('u-hidden');
       item.state = false;
     }
-
   }
 
 
