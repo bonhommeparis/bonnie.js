@@ -23,6 +23,9 @@ class Vacuum {
     }, this);
   }
 
+  getInfos() {
+    return JSON.parse(JSON.stringify(this._infos));
+  }
   // _______________________________________________________ private
   // -
 
