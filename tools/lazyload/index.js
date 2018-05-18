@@ -15,6 +15,13 @@ export default class LazyLoad {
    */
   constructor(options = {}) {
 
+    this._el = options.el || document;
+
+    this._params = {
+      query: options.query || '.js-lazy-load',
+      imgClass: options.imgClass || 'o-Img'
+    };
+
     const ioOptions = {
       root: options.root || null,
       rootMargin: options.rootMargin || '5%',
@@ -79,7 +86,8 @@ export default class LazyLoad {
 
   /** @private */
   _parse() {
-    const els = [...document.querySelectorAll('.js-lazy-load:not(.is-loaded)')];
+    const query = `${this._params.query}:not(.is-loaded)`;
+    const els = [...this._el.querySelectorAll(query)];
     var i = els.length;
     while (--i > -1) this._observer.observe(els[i]);
   }
@@ -89,6 +97,8 @@ export default class LazyLoad {
    * @param {HTMLElement} el
    */
   _loadElement(el) {
+
+    this._observer.unobserve(el);
 
     const item = {
       el: el,
@@ -115,7 +125,6 @@ export default class LazyLoad {
         item.isMedia = true;
         break;
     }
-
 
     item.onLoadComplete = () => {
 
@@ -152,8 +161,14 @@ export default class LazyLoad {
       // If `el` is not a <img>, a <picture>, a <video>, a <audio> and an <iframe>,
       // we assume that we will set the `data-src` as `background-image`.
       if (!['img', 'picture', 'video', 'audio', 'iframe'].includes(nodeName)) {
-        item.lazyEl = new Image();
-        item.isBackgroundImage = true;
+        
+        if (el.classList.contains(this._params.imgClass)) {
+          item.lazyEl   = el.children[0];
+        }
+        else {
+          item.lazyEl = new Image();
+          item.isBackgroundImage = true;
+        }
       }
 
       // add to array for better clean
@@ -234,10 +249,9 @@ export default class LazyLoad {
       if (pForceClean || item.isEnableToClean) {
         this._itemsToLoad.splice(ln, 1);
         this._removeEvents(item);
+        this._observer.unobserve(item.el);
         item = null;
       }
-
     }
   }
-
 }
