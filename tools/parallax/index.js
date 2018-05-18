@@ -4,9 +4,13 @@ class Parallax {
 
   // ________________________________________________________ constructor
   // -
-  constructor(el) {
+  constructor(options) {
 
-    this._el = el;
+    this._el = options instanceof HTMLElement ? options : options.el;
+
+    this._params = {
+      hiddenClass: options.hiddenClass || 'u-hidden'
+    };
 
     this._defaultFunctions = {
       createCacheItem: this._createCacheItem.bind(this),
@@ -16,14 +20,11 @@ class Parallax {
     };
 
     this._vars = {
-      scrollY: 0,
+      current: 0,
       isResizing: false
     };
 
-    this._size = {
-      x: 0,
-      y: 0
-    };
+    this._size = {x: 0, y: 0};
 
     this._rules = new LinkedList();
   }
@@ -32,14 +33,14 @@ class Parallax {
   // -
 
   set current(value) {
-    this._vars.scrollY = value;
+    this._vars.current = value;
     if (this._vars.isResizing) return;
 
     this._update();
   }
 
   get current() {
-    return this._vars.scrollY;
+    return this._vars.current;
   }
 
   /**
@@ -68,12 +69,11 @@ class Parallax {
       fns: Object.assign({}, this._defaultFunctions, functions)
     };
 
-    rule.domItems = null;
+    rule.domItems = [];
     rule.cachedItems = new LinkedList();
 
     this._rules.push(rule);
   }
-
 
   /**
    * Set viewport size
@@ -86,6 +86,13 @@ class Parallax {
     this._size.y = pHeight;
 
     this._resize();
+  }
+
+  /**
+   * Render
+   */
+  render() {
+    this._update();
   }
 
   /**
@@ -173,22 +180,102 @@ class Parallax {
   /** @private */
   _createCacheItem(domEl) {
 
-    const bounding = domEl.getBoundingClientRect();
+    const params = {
+      isBasedScrollTop: domEl.hasAttribute('data-scroll-top') || domEl.dataset.scrollTop === true, 
+      isBasedOnParent: domEl.hasAttribute('data-based-on-parent'),
+      invert: domEl.hasAttribute('data-invert') || domEl.dataset.invert === true,
+      speed: domEl.dataset.speed !== undefined ? parseFloat(domEl.dataset.speed) : 1,
+      deltaStart: parseFloat(domEl.dataset.deltaStart) || 0,
+      deltaEnd: parseFloat(domEl.dataset.deltaEnd) || 0
+    };
+
+    // Check the validity of parameters
+    this._checkParamsValidity(params);
+
+    // Get the bounding to watch
+    const bounding = params.isBasedOnParent
+                     ? domEl.parentElement.getBoundingClientRect()
+                     : domEl.getBoundingClientRect();
+
+    //  Calculate Observed item datas
+    const observedDatas = this._calculateObservedDatas(bounding, params);
+
+    // Calculate values of item to translate
+    // - if not based on parent, it's the same item
+    var deltaStart       = observedDatas.deltaStart,
+        deltaTranslation = observedDatas.deltaTranslation;
+
+    // - if based on parent, update deltas
+    if (params.isBasedOnParent) {
+      const elBounding = domEl.getBoundingClientRect();
+      const size = domEl.getAttribute('data-based-on-parent');
+      const deltaFromParent = parseInt((size - 100) / size * 100);
+      const deltaStartFromParent = params.invert ? 0 : -deltaFromParent;
+      const deltaEndFromParent = params.invert ? -deltaFromParent : 0;
+
+      deltaStart       = elBounding.height * deltaStartFromParent / 100;
+      deltaTranslation = (elBounding.height * deltaEndFromParent / 100) - deltaStart;
+    }
 
     const cache = {
       el: domEl,
-      top: bounding.top + this._vars.scrollY,
-      bottom: bounding.bottom + this._vars.scrollY,
       width: bounding.width,
       height: bounding.height,
-      speed: parseFloat(domEl.getAttribute('data-speed')) || 1,
-      deltaStart: parseFloat(domEl.getAttribute('data-delta-start')) || 0,
-      deltaEnd: parseFloat(domEl.getAttribute('data-delta-end')) || 0,
-      // invert: domEl.hasAttribute('data-invert') || false,
+
+      speed: params.speed,
+      isBasedScrollTop: params.isBasedScrollTop,
+
+      observed: observedDatas,
+
+      deltaStart: deltaStart,
+      deltaTranslation: deltaTranslation,
+
       state: true
     };
 
     return cache;
+  }
+
+  /** @private */
+  _calculateObservedDatas(bounding, params) {
+
+    // Calculate deltas of the element to watch
+    const deltaStart       = bounding.height * params.deltaStart / 100;
+    const deltaEnd         = bounding.height * params.deltaEnd / 100;
+    const deltaTranslation = deltaEnd - deltaStart;
+
+    // Calculate positions depending on scroll
+    const startPosition  = bounding.top + this._vars.current + deltaStart;
+    const endPosition    = bounding.bottom + this._vars.current + deltaEnd;
+    const deltaTranslate = endPosition - startPosition;
+
+    return {
+      deltaStart: deltaStart,
+      deltaEnd: deltaEnd,
+      deltaTranslation: deltaTranslation,
+      startPosition: startPosition,
+      min: params.isBasedScrollTop ? startPosition : this._size.y,
+      max: -deltaTranslate,
+      fullHeight: deltaTranslate + this._size.y
+    };
+  }
+
+  /** @private */
+  _checkParamsValidity(params) {
+
+    var error = null;
+
+    if (params.speed !== 1 && (params.deltaStart !== 0 || params.deltaStart !== 0)) {
+      error = 'Setting speed and deltaStart or deltaEnd can provide an unwanted effect';
+    }
+
+    if (params.isBasedOnParent && params.speed !== 1) {
+      error = 'If item is based on parent, speed should not be set';
+    }
+
+    if (error !== null) {
+      console.warn('Parallax - ' + error);
+    }
   }
 
   /** @private */
@@ -216,7 +303,7 @@ class Parallax {
   /** @private */
   _resetCacheItem(item) {
     item.el.style.removeProperty('transform');
-    item.el.classList.remove('u-hidden');
+    item.el.classList.remove(this._params.hiddenClass);
   }
 
   /** @private */
@@ -250,7 +337,6 @@ class Parallax {
 
         rule.fns.updateItem(cacheNode.data, rule.fns.calculateViewPort(cacheNode.data));
 
-
         cacheNode = cacheNode.next;
       }
 
@@ -265,49 +351,36 @@ class Parallax {
     if (result.isVisible) {
       item.el.style.transform = `translate3d(0, ${result.value}px, 0)`;
       if (!item.state) {
-        item.el.classList.remove('u-hidden');
+        item.el.classList.remove(this._params.hiddenClass);
         item.state = true;
       }
     }
     else {
-      item.el.classList.add('u-hidden');
+      item.el.classList.add(this._params.hiddenClass);
       item.state = false;
     }
   }
-
 
   /* -------- CalculateViewPorts -------- */
 
   /** @private */
   _calculateViewPort(cache) {
 
-    const speed = cache.speed;
+    const speed    = cache.speed;
+    const observed = cache.observed;
 
-    const deltaStart = cache.height * cache.deltaStart / 100;
-    const deltaEnd = cache.height * cache.deltaEnd / 100;
-    const delta = deltaEnd - deltaStart;
+    const itemPositionFromTop = observed.startPosition - this._vars.current;
+    const ratio = (itemPositionFromTop - observed.min) / (observed.max - observed.min) * speed;
+    const isVisible = ratio >= 0 && ratio <= 1;
 
-    const top = cache.top + deltaStart;
-    const bottom = cache.bottom + deltaEnd;
-
-    const hh = bottom - top;
-    const fullHeight = hh + this._size.y;
-
-    const scrollY = this._vars.scrollY;
-    const itemScrollY = (top - scrollY);
-
-    const min = this._size.y;
-
-    const max = -hh;
-    const ratio = (itemScrollY - min) / (max - min) * speed;
-
-    const value = (deltaStart + delta * ratio) + (-fullHeight + fullHeight / speed) * ratio;
-    const isVisible = ratio > 0 && ratio < 1;
+    const value = cache.isBasedScrollTop === true
+      ? (cache.deltaStart + cache.deltaTranslation * ratio) + this._vars.current * (1 - cache.speed)
+      : (cache.deltaStart + cache.deltaTranslation * ratio) + (-observed.fullHeight + observed.fullHeight / speed) * ratio;
 
     return {
+      ratio: ratio,
       isVisible: isVisible,
-      value: value.toFixed(2),
-      ratio: ratio
+      value: value.toFixed(2)
     };
   }
 
