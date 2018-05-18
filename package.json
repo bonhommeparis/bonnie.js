@@ -1,6 +1,6 @@
 {
   "name": "bonnie.js",
-  "version": "0.1.10",
+  "version": ".2.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -10,7 +10,18 @@
     "url": "https://github.com/bonhommeparis/bonnie.js/issues"
   },
   "homepage": "https://github.com/bonhommeparis/bonnie.js#readme",
-  "scripts": {},
+  "scripts": {
+    "parallax": "watchify demos/parallax/index.js -o demos/parallax/bundle.js"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.6.1",
+    "babelify": "^8.0.0",
+    "browserify": "^16.2.0",
+    "eslint": "^4.16.0",
+    "watchify": "^3.11.0"
+  },
+  "dependencies": {},
   "browserify": {
     "transform": [
       [
@@ -32,8 +43,5 @@
         }
       ]
     ]
-  },
-  "devDependencies": {
-    "eslint": "^4.16.0"
   }
 }
