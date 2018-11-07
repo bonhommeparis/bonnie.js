@@ -13,7 +13,7 @@
  */
 const fitInto = (pItemSize, pInto, pCover = true) => {
 
-  const scx = pInto.pWidthCont / pItemSize.width;
+  const scx = pInto.width / pItemSize.width;
   const scy = pInto.height / pItemSize.height;
   const sc  = scx > scy
               ? (pCover ? scx : scy)
@@ -23,7 +23,7 @@ const fitInto = (pItemSize, pInto, pCover = true) => {
   const height = pItemSize.height * sc;
 
   return {
-    x: (pInto.pWidthCont - width) / 2,
+    x: (pInto.width - width) / 2,
     y: (pInto.height - height) / 2,
     width: width,
     height: height
