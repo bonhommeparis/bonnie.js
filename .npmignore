@@ -1,7 +1,6 @@
 # exclude
-tools/anchors/**
-tools/customScroll/**
-demo/**/**
+tools
+demo
 
 # docs
 doc
