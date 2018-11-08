@@ -26,7 +26,8 @@ const fitInto = (pItemSize, pInto, pCover = true) => {
     x: (pInto.width - width) / 2,
     y: (pInto.height - height) / 2,
     width: width,
-    height: height
+    height: height,
+    sc: sc
   };
 };
 
